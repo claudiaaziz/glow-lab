@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"checkJs": false,
+		"module": "CommonJS",
+		"moduleResolution": "node"
+	},
+	"exclude": ["node_modules"]
+}
