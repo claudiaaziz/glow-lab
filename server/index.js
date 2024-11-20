@@ -8,6 +8,7 @@ const port = 3000;
 app.use(cors());
 app.use(express.json());
 
+// Routes
 app.get('/api/products', (req, res) => {
 	res.json(products);
 });

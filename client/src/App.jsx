@@ -1,12 +1,14 @@
 import Header from './components/Header';
 import ProductList from './components/ProductList';
-import './styles/global.css';
+import { CartProvider } from './context/CartContext';
 
 export default function App() {
 	return (
-		<div className='app-container'>
-			<Header />
-			<ProductList />
-		</div>
+		<CartProvider>
+			<div className='app-container'>
+				<Header />
+				<ProductList />
+			</div>
+		</CartProvider>
 	);
 }
