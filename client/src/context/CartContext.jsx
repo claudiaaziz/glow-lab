@@ -19,5 +19,17 @@ export function CartProvider({ children }) {
 		});
 	};
 
-	return <CartContext.Provider value={{ cartItems, addToCart }}>{children}</CartContext.Provider>;
+	const removeItemFromCart = (productId) => {
+		setCartItems((currentItems) => {
+			const item = currentItems.find((item) => item.id === productId);
+
+			if (item.quantity > 1) {
+				return currentItems.map((item) => (item.id === productId ? { ...item, quantity: item.quantity - 1 } : item));
+			} else {
+				return currentItems.filter((item) => item.id !== productId);
+			}
+		});
+	};
+
+	return <CartContext.Provider value={{ cartItems, addToCart, removeItemFromCart }}>{children}</CartContext.Provider>;
 }
