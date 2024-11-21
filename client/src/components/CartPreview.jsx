@@ -1,74 +1,56 @@
 import { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../context/CartContext';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import CheckoutForm from './CheckoutForm';
 import '../styles/CartPreview.css';
-import { v4 as uuidv4 } from 'uuid';
-import { CardElement, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 export default function CartPreview({ onClose }) {
 	const { cartItems, removeItemFromCart } = useContext(CartContext);
-	const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-	const stripe = useStripe();
-	const elements = useElements();
-	const [clientSecret, setClientSecret] = useState('');
-	const [isProcessing, setIsProcessing] = useState(false);
-	const [paymentStatus, setPaymentStatus] = useState(null);
+	const [stripePromise, setStripePromise] = useState(null);
+	const [clientSecret, setClientSecret] = useState(null);
 
 	useEffect(() => {
-		// Create PaymentIntent as soon as the page loads
-
-		const totalPriceInCents = totalPrice * 100;
-
-		const fetchClientSecret = async () => {
-			const res = await fetch('http://localhost:3000/create-payment-intent', {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({ amount: totalPriceInCents }),
-			});
-
-			const data = await res.json();
-			debugger;
-			setClientSecret(data.clientSecret);
+		const getPublishableKey = async () => {
+			try {
+				const response = await fetch('/stripe/config');
+				const { publishableKey } = await response.json();
+				setStripePromise(loadStripe(publishableKey));
+			} catch (error) {
+				console.error('Error loading Stripe:', error);
+			}
 		};
 
-		fetchClientSecret();
+		getPublishableKey();
 	}, []);
 
-	const handleCheckout = async (e) => {
-		e.preventDefault();
-		setIsProcessing(true);
-		const { error, paymentIntent } = await stripe.confirmPayment({
-			elements,
-			confirmParams: {
-				return_url: 'http://localhost:3000/checkout/success', // Update with your return URL
-			},
-		});
-		const idempotencyKey = uuidv4();
+	const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-		const response = await fetch(`http://localhost:3000/v1/payment_intents/${idempotencyKey}`, {
-			method: 'POST',
-			body: JSON.stringify({ payment: totalPrice }),
-		});
-		const idk = await response.json();
-		debugger;
-		console.log('handleCheckout 🩷 response:', response);
+	useEffect(() => {
+		if (totalPrice > 0) {
+			const createPaymentIntent = async () => {
+				try {
+					const response = await fetch('/stripe/create-payment-intent', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							amount: Math.round(totalPrice * 100), // amount in cents
+						}),
+					});
 
-		const result = await stripe.confirmCardPayment(idk, {
-			payment_method: {
-				// card: cardElement,
-				// billing_details: { name: 'Customer Name' },
-			},
-		});
-		if (error) {
-			setPaymentStatus(`Error: ${error.message}`);
-			setIsProcessing(false);
-		} else if (paymentIntent.status === 'succeeded') {
-			setPaymentStatus('Payment Successful!');
-			setIsProcessing(false);
+					const data = await response.json();
+					setClientSecret(data.clientSecret);
+				} catch (error) {
+					console.error('Error creating payment intent:', error);
+				}
+			};
+
+			createPaymentIntent();
 		}
-	};
+	}, []);
 
-	if (!clientSecret) {
+	if (!stripePromise) {
 		return <div>Loading...</div>;
 	}
 
@@ -103,13 +85,12 @@ export default function CartPreview({ onClose }) {
 				<div className='cart-total'>
 					<strong>Total: ${totalPrice.toFixed(2)}</strong>
 				</div>
-				<button className='checkout-btn' onClick={handleCheckout} type='submit' disabled={!stripe || isProcessing}>
-					{isProcessing ? 'Processing...' : 'Pay Now'}
-				</button>
+				{clientSecret && (
+					<Elements stripe={stripePromise} options={{ clientSecret }}>
+						<CheckoutForm clientSecret={clientSecret} onClose={onClose} />
+					</Elements>
+				)}
 			</div>
-
-			{clientSecret && <PaymentElement clientSecret={clientSecret} />}
-			{paymentStatus && <div>{paymentStatus}</div>}
 		</div>
 	);
 }

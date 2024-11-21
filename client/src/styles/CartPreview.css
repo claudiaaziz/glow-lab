@@ -6,6 +6,7 @@
 	max-height: 90vh;
 	background: white;
 	padding: 1rem;
+	overflow-y: auto;
 }
 
 .cart-preview-header {
@@ -81,4 +82,13 @@
 
 .checkout-btn:hover {
 	background: #34495e;
+}
+
+.error-message {
+	color: #dc3545;
+	margin: 1rem 0;
+	padding: 0.5rem;
+	border-radius: 4px;
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
 }
