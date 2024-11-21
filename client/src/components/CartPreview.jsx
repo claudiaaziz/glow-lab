@@ -1,54 +1,33 @@
 import { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import CheckoutForm from './CheckoutForm';
 import '../styles/CartPreview.css';
+import { useStripeSetup } from '../hooks/useStripeSetup';
+import { createPaymentIntent } from '../services/stripe';
+import { convertToCents, formatPrice } from '../utils/formatters';
 
 export default function CartPreview({ onClose }) {
 	const { cartItems, removeItemFromCart } = useContext(CartContext);
-
-	const [stripePromise, setStripePromise] = useState(null);
+	const stripePromise = useStripeSetup();
 	const [clientSecret, setClientSecret] = useState(null);
-
-	useEffect(() => {
-		const getPublishableKey = async () => {
-			try {
-				const response = await fetch('/stripe/config');
-				const { publishableKey } = await response.json();
-				setStripePromise(loadStripe(publishableKey));
-			} catch (error) {
-				console.error('Error loading Stripe:', error);
-			}
-		};
-
-		getPublishableKey();
-	}, []);
 
 	const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
 	useEffect(() => {
 		if (totalPrice > 0) {
-			const createPaymentIntent = async () => {
+			const setupPaymentIntent = async () => {
 				try {
-					const response = await fetch('/stripe/create-payment-intent', {
-						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
-						body: JSON.stringify({
-							amount: Math.round(totalPrice * 100), // amount in cents
-						}),
-					});
-
-					const data = await response.json();
-					setClientSecret(data.clientSecret);
+					const { clientSecret } = await createPaymentIntent(convertToCents(totalPrice));
+					setClientSecret(clientSecret);
 				} catch (error) {
 					console.error('Error creating payment intent:', error);
 				}
 			};
 
-			createPaymentIntent();
+			setupPaymentIntent();
 		}
-	}, []);
+	}, [totalPrice]);
 
 	if (!stripePromise) {
 		return <div>Loading...</div>;
@@ -75,7 +54,7 @@ export default function CartPreview({ onClose }) {
 								</button>
 							</div>
 							<p>Quantity: {item.quantity}</p>
-							<p>${(item.price * item.quantity).toFixed(2)}</p>
+							<p>${formatPrice(item.price * item.quantity)}</p>
 						</div>
 					</div>
 				))}
@@ -83,11 +62,11 @@ export default function CartPreview({ onClose }) {
 
 			<div className='cart-preview-footer'>
 				<div className='cart-total'>
-					<strong>Total: ${totalPrice.toFixed(2)}</strong>
+					<strong>Total: ${formatPrice(totalPrice)}</strong>
 				</div>
 				{clientSecret && (
-					<Elements stripe={stripePromise} options={{ clientSecret }}>
-						<CheckoutForm clientSecret={clientSecret} onClose={onClose} />
+					<Elements stripe={stripePromise} options={{ clientSecret }} key={clientSecret}>
+						<CheckoutForm onClose={onClose} />
 					</Elements>
 				)}
 			</div>

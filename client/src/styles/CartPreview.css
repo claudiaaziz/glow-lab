@@ -68,7 +68,11 @@
 
 .cart-preview-footer {
 	padding-top: 1rem;
-	border-top: 1px solid #eee;
+	/* border-top: 1px solid #eee; */
+}
+
+.cart-total {
+	margin: 1rem 0 1.5rem 0;
 }
 
 .checkout-btn {
