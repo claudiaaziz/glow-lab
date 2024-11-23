@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../context/CartContext';
-import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
+import StripeWrapper from './StripeWrapper';
 import '../styles/ShoppingCart.css';
 import { useStripeSetup } from '../hooks/useStripeSetup';
 import { createPaymentIntent, updatePaymentIntent } from '../services/stripe';
@@ -90,9 +90,9 @@ export default function ShoppingCart({ onClose }) {
 							<strong>Total: ${formatPrice(totalPrice)}</strong>
 						</div>
 						{clientSecret && (
-							<Elements stripe={stripePromise} options={{ clientSecret }}>
+							<StripeWrapper clientSecret={clientSecret}>
 								<CheckoutForm />
-							</Elements>
+							</StripeWrapper>
 						)}
 					</div>
 				</>
