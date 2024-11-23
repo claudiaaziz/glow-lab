@@ -21,13 +21,12 @@ export default function CheckoutForm() {
 		setErrorMessage(null);
 
 		try {
-			const { error, paymentIntent } = await stripe.confirmPayment({
+			const { error } = await stripe.confirmPayment({
 				elements,
 				confirmParams: {
 					return_url: `${window.location.origin}/success`,
 				},
 			});
-			console.log('handlePayment 🩷 paymentIntent:', paymentIntent);
 
 			if (error) {
 				setErrorMessage(error.message || 'Payment failed.');

@@ -51,7 +51,7 @@ router.post('/create-payment-intent', async (req, res) => {
 router.patch('/update-payment-intent/:id', async (req, res) => {
 	try {
 		const { cartItems } = req.body;
-		// console.log('router.put 🩷 cartItems:', cartItems);
+		console.log('router.patch 🩷 cartItems:', cartItems);
 		const { id } = req.params;
 
 		// Validate cart items
@@ -62,7 +62,7 @@ router.patch('/update-payment-intent/:id', async (req, res) => {
 
 		// Calculate total
 		const total = calculateTotal(cartItems);
-		// console.log('router.put 🩷 total:', total);
+		console.log('router.patch 🩷 total:', total);
 		const amountInCents = Math.round(total * 100);
 
 		await stripe.paymentIntents.update(id, {

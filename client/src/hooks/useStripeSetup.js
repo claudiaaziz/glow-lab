@@ -9,6 +9,7 @@ export function useStripeSetup() {
 		const setupStripe = async () => {
 			try {
 				const publishableKey = await getPublishableKey();
+				// Initialize Stripe here since we need to fetch the key first
 				setStripePromise(loadStripe(publishableKey));
 			} catch (error) {
 				console.error('Error loading Stripe:', error);

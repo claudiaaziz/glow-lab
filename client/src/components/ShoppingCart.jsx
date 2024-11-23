@@ -1,50 +1,57 @@
 import { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../context/CartContext';
-import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
+import StripeWrapper from './StripeWrapper';
 import '../styles/ShoppingCart.css';
 import { useStripeSetup } from '../hooks/useStripeSetup';
 import { createPaymentIntent, updatePaymentIntent } from '../services/stripe';
 import { formatPrice } from '../utils/formatters';
 
 export default function ShoppingCart({ onClose }) {
-	const { cartItems, removeItemFromCart } = useContext(CartContext);
+	const { cartItems, removeItemFromCart, paymentIntentId, setPaymentIntentId, clientSecret, setClientSecret } =
+		useContext(CartContext);
 	const stripePromise = useStripeSetup();
-	const [clientSecret, setClientSecret] = useState(null);
-	const [paymentIntentId, setPaymentIntentId] = useState(null);
 
 	const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
 	useEffect(() => {
+		// Create/Update PaymentIntent
 		if (totalPrice > 0) {
 			const cartItemsToSend = cartItems.map((item) => ({
 				id: item.id,
 				quantity: item.quantity,
 			}));
 
-			const managePaymentIntent = async () => {
+			const managePayment = async () => {
 				try {
 					if (!paymentIntentId) {
-						// Create a new PaymentIntent
-						const { clientSecret, paymentIntentId: newPaymentIntentId } = await createPaymentIntent(cartItemsToSend);
+						// Create PaymentIntent
+						const { clientSecret, paymentIntentId: newId } = await createPaymentIntent(cartItemsToSend);
 						setClientSecret(clientSecret);
-						setPaymentIntentId(newPaymentIntentId);
+						setPaymentIntentId(newId);
+						// console.log('ShoppingCart 🩷 PaymentIntentId created. This should only be hit once', newId);
 					} else {
-						// Update existing PaymentIntent
+						// Update PaymentIntent
 						await updatePaymentIntent(cartItemsToSend, paymentIntentId);
+						// console.log(
+						// 	'updatePaymentIntent 🧚🏻‍♀️ cartItemsToSend:',
+						// 	cartItemsToSend,
+						// 	'paymentIntentId:',
+						// 	paymentIntentId
+						// );
 					}
 				} catch (error) {
-					console.error('Error managing PaymentIntent:', error);
+					console.error('Error managing payment:', error);
 				}
 			};
 
-			managePaymentIntent();
+			managePayment();
 		}
-	}, [totalPrice]);
+	}, [cartItems]);
 
 	if (!stripePromise) {
-		// Loading Indicator
-		return <div></div>;
+		// Loading Spinner
+		return;
 	}
 
 	return (
@@ -86,9 +93,9 @@ export default function ShoppingCart({ onClose }) {
 							<strong>Total: ${formatPrice(totalPrice)}</strong>
 						</div>
 						{clientSecret && (
-							<Elements stripe={stripePromise} options={{ clientSecret }}>
+							<StripeWrapper clientSecret={clientSecret}>
 								<CheckoutForm />
-							</Elements>
+							</StripeWrapper>
 						)}
 					</div>
 				</>

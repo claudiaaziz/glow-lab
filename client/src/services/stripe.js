@@ -10,7 +10,14 @@ export const createPaymentIntent = async (cartItems) => {
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ cartItems }),
 	});
-	return response.json();
+
+	const data = await response.json();
+
+	if (!response.ok) {
+		throw new Error(data.error || 'Payment setup failed');
+	}
+
+	return data;
 };
 
 export const updatePaymentIntent = async (cartItems, paymentIntentId) => {
@@ -19,5 +26,8 @@ export const updatePaymentIntent = async (cartItems, paymentIntentId) => {
 		headers: { 'Content-Type': 'application/json' },
 		body: JSON.stringify({ cartItems }),
 	});
-	return response.json();
+
+	if (!response.ok) {
+		throw new Error('Failed to update payment');
+	}
 };
