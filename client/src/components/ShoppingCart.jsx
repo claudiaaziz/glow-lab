@@ -1,16 +1,51 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
 import '../styles/ShoppingCart.css';
 import { useStripeSetup } from '../hooks/useStripeSetup';
+import { createPaymentIntent, updatePaymentIntent } from '../services/stripe';
 import { formatPrice } from '../utils/formatters';
 
 export default function ShoppingCart({ onClose }) {
-	const { cartItems, removeItemFromCart, clientSecret } = useContext(CartContext);
+	const { cartItems, removeItemFromCart, paymentIntentId, setPaymentIntentId } = useContext(CartContext);
 	const stripePromise = useStripeSetup();
 
+	const [clientSecret, setClientSecret] = useState(null);
+
 	const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+	useEffect(() => {
+		if (totalPrice > 0) {
+			const cartItemsToSend = cartItems.map((item) => ({
+				id: item.id,
+				quantity: item.quantity,
+			}));
+
+			const managePayment = async () => {
+				try {
+					if (!paymentIntentId) {
+						const { clientSecret, paymentIntentId: newId } = await createPaymentIntent(cartItemsToSend);
+						setClientSecret(clientSecret);
+						setPaymentIntentId(newId);
+						console.log('ShoppingCart 🩷 PaymentIntentId created. This should only be hit once', newId);
+					} else {
+						await updatePaymentIntent(cartItemsToSend, paymentIntentId);
+						console.log(
+							'updatePaymentIntent 🧚🏻‍♀️ cartItemsToSend:',
+							cartItemsToSend,
+							'paymentIntentId:',
+							paymentIntentId
+						);
+					}
+				} catch (error) {
+					console.error('Error managing payment:', error);
+				}
+			};
+
+			managePayment();
+		}
+	}, [cartItems]);
 
 	if (!stripePromise) {
 		return <div></div>;
