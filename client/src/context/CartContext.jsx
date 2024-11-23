@@ -5,6 +5,7 @@ export const CartContext = createContext();
 export function CartProvider({ children }) {
 	const [cartItems, setCartItems] = useState([]);
 	const [paymentIntentId, setPaymentIntentId] = useState(null);
+	const [clientSecret, setClientSecret] = useState(null);
 
 	const addToCart = (product) => {
 		setCartItems((currentItems) => {
@@ -40,6 +41,8 @@ export function CartProvider({ children }) {
 				removeItemFromCart,
 				paymentIntentId,
 				setPaymentIntentId,
+				clientSecret,
+				setClientSecret,
 			}}
 		>
 			{children}

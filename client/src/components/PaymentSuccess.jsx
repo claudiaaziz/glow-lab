@@ -36,7 +36,7 @@ const PaymentSuccessContent = () => {
 					status: paymentIntent.status,
 					id: paymentIntent.id,
 				});
-				console.log('fetchPaymentDetails 🩷 paymentIntent:', paymentIntent);
+				// console.log('fetchPaymentDetails 🩷 paymentIntent:', paymentIntent);
 			} catch (error) {
 				console.error('Error fetching payment details:', error);
 			}
@@ -45,7 +45,7 @@ const PaymentSuccessContent = () => {
 		fetchPaymentDetails();
 	}, [stripe, clientSecret]);
 
-	if (!paymentDetails) return <div>Loading...</div>;
+	if (!paymentDetails) return <div className='loading-container'>Loading...</div>;
 
 	return (
 		<div className='payment-success'>

@@ -8,14 +8,14 @@ import { createPaymentIntent, updatePaymentIntent } from '../services/stripe';
 import { formatPrice } from '../utils/formatters';
 
 export default function ShoppingCart({ onClose }) {
-	const { cartItems, removeItemFromCart, paymentIntentId, setPaymentIntentId } = useContext(CartContext);
+	const { cartItems, removeItemFromCart, paymentIntentId, setPaymentIntentId, clientSecret, setClientSecret } =
+		useContext(CartContext);
 	const stripePromise = useStripeSetup();
-
-	const [clientSecret, setClientSecret] = useState(null);
 
 	const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
 	useEffect(() => {
+		// Create/Update PaymentIntent
 		if (totalPrice > 0) {
 			const cartItemsToSend = cartItems.map((item) => ({
 				id: item.id,
@@ -25,18 +25,20 @@ export default function ShoppingCart({ onClose }) {
 			const managePayment = async () => {
 				try {
 					if (!paymentIntentId) {
+						// Create PaymentIntent
 						const { clientSecret, paymentIntentId: newId } = await createPaymentIntent(cartItemsToSend);
 						setClientSecret(clientSecret);
 						setPaymentIntentId(newId);
-						console.log('ShoppingCart 🩷 PaymentIntentId created. This should only be hit once', newId);
+						// console.log('ShoppingCart 🩷 PaymentIntentId created. This should only be hit once', newId);
 					} else {
+						// Update PaymentIntent
 						await updatePaymentIntent(cartItemsToSend, paymentIntentId);
-						console.log(
-							'updatePaymentIntent 🧚🏻‍♀️ cartItemsToSend:',
-							cartItemsToSend,
-							'paymentIntentId:',
-							paymentIntentId
-						);
+						// console.log(
+						// 	'updatePaymentIntent 🧚🏻‍♀️ cartItemsToSend:',
+						// 	cartItemsToSend,
+						// 	'paymentIntentId:',
+						// 	paymentIntentId
+						// );
 					}
 				} catch (error) {
 					console.error('Error managing payment:', error);
@@ -48,7 +50,8 @@ export default function ShoppingCart({ onClose }) {
 	}, [cartItems]);
 
 	if (!stripePromise) {
-		return <div></div>;
+		// Loading Spinner
+		return;
 	}
 
 	return (

@@ -5,8 +5,8 @@ import '../styles/ProductList.css';
 export default function ProductList() {
 	const { products, loading, error } = useProducts();
 
-	if (loading) return <div>Loading...</div>;
-	if (error) return <div>Error: {error}</div>;
+	if (loading) return <div className='loading-container'>Loading...</div>;
+	if (error) return <div className='error-container'>Error: {error}</div>;
 
 	return (
 		<div className='products-grid'>
