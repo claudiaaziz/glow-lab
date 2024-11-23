@@ -14,7 +14,6 @@ export function useStripeSetup() {
 				console.error('Error loading Stripe:', error);
 			}
 		};
-
 		setupStripe();
 	}, []);
 

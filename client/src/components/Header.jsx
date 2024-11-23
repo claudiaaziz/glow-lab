@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { CartContext } from '../context/CartContext';
-import CartPreview from './CartPreview';
+import CartPreview from './ShoppingCart';
 import '../styles/Header.css';
 import { useNavigate } from 'react-router-dom';
 

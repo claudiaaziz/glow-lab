@@ -2,11 +2,12 @@
 	position: fixed;
 	top: 10vh;
 	right: 0;
-	width: 400px;
 	max-height: 90vh;
 	background: white;
 	padding: 1rem;
 	overflow-y: auto;
+	max-width: 400px;
+	width: 80%;
 }
 
 .cart-preview-header {
@@ -55,6 +56,7 @@
 	font-size: 1.5rem;
 	padding: 0.2rem 0.5rem;
 	transition: color 0.2s;
+	width: unset;
 }
 
 .remove-item-btn {
@@ -64,30 +66,32 @@
 .remove-item-btn:hover,
 .close-btn:hover {
 	color: #34495e;
+	background: none;
 }
 
 .cart-preview-footer {
 	padding-top: 1rem;
-	/* border-top: 1px solid #eee; */
 }
 
 .cart-total {
 	margin: 1rem 0 1.5rem 0;
 }
 
-.checkout-btn {
-	width: 100%;
-	padding: 0.75rem;
-	background: #2c3e50;
-	color: white;
-	border-radius: 4px;
-	margin-top: 1rem;
+.empty-cart {
+	padding: 2rem;
+	text-align: center;
+	color: #666;
 }
 
-.checkout-btn:hover {
-	background: #34495e;
+.empty-cart h4 {
+	margin-bottom: 0.5rem;
 }
 
+.empty-cart p {
+	color: #888;
+}
+
+/* FOR CHECKOUT */
 .error-message {
 	color: #dc3545;
 	margin: 1rem 0;

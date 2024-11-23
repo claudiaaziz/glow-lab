@@ -17,22 +17,12 @@
 	box-sizing: border-box;
 }
 
-a {
-	font-weight: 500;
-	color: #646cff;
-	text-decoration: inherit;
-}
-a:hover {
-	color: #535bf2;
-}
-
 body {
 	margin: 0;
 	display: flex;
 	place-items: center;
 	min-width: 320px;
 	min-height: 100vh;
-	/* background-color: pink; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -44,15 +34,24 @@ h1 {
 }
 
 button {
-	border-radius: 8px;
-	padding: 0.6em 1.2em;
-	font-size: 1em;
-	font-weight: 500;
-	font-family: inherit;
-	background-color: #1a1a1a;
-	cursor: pointer;
-	transition: border-color 0.25s;
+	padding: 0.75rem;
+	background: #2c3e50;
+	color: white;
+	border-radius: 4px;
+	margin-top: 1rem;
 	border: none;
+	cursor: pointer;
+	width: 100%;
+	transition: background-color 0.2s;
+}
+
+button:hover {
+	background: #34495e;
+}
+
+button:disabled {
+	background: #ccc;
+	cursor: not-allowed;
 }
 
 @media (prefers-color-scheme: light) {
@@ -72,14 +71,7 @@ button {
 	text-align: center;
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	/* background-color: #f0f0f0; */
-}
-
-.app-container {
+	place-items: center;
 	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
 	width: 100vw;
 }

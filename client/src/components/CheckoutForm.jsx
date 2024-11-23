@@ -1,15 +1,21 @@
 import { useState } from 'react';
 import { PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
-export default function CheckoutForm({ onClose }) {
+export default function CheckoutForm() {
 	const stripe = useStripe();
 	const elements = useElements();
+
 	const [isProcessing, setIsProcessing] = useState(false);
 	const [errorMessage, setErrorMessage] = useState(null);
+	const [isPaymentElementReady, setIsPaymentElementReady] = useState(false);
 
 	const handlePayment = async (e) => {
 		e.preventDefault();
-		if (!stripe || !elements) setErrorMessage('An unexpected error occurred. Please refresh the page.');
+
+		if (!stripe || !elements) {
+			setErrorMessage('Payment system not initialized.');
+			return;
+		}
 
 		setIsProcessing(true);
 		setErrorMessage(null);
@@ -21,15 +27,15 @@ export default function CheckoutForm({ onClose }) {
 					return_url: `${window.location.origin}/success`,
 				},
 			});
+			console.log('handlePayment 🩷 paymentIntent:', paymentIntent);
 
 			if (error) {
-				setErrorMessage(error.message);
-			} else if (paymentIntent && paymentIntent.status === 'succeeded') {
-				onClose();
-				window.location.href = `/success`;
+				setErrorMessage(error.message || 'Payment failed.');
+				console.error('Payment error:', error);
 			}
-		} catch {
+		} catch (err) {
 			setErrorMessage('An unexpected error occurred.');
+			console.error('Payment error:', err);
 		} finally {
 			setIsProcessing(false);
 		}
@@ -37,9 +43,9 @@ export default function CheckoutForm({ onClose }) {
 
 	return (
 		<form onSubmit={handlePayment}>
-			<PaymentElement />
+			<PaymentElement onReady={() => setIsPaymentElementReady(true)} />
 			{errorMessage && <div className='error-message'>{errorMessage}</div>}
-			<button className='checkout-btn' type='submit' disabled={!stripe || isProcessing}>
+			<button className='checkout-btn' type='submit' disabled={!stripe || !isPaymentElementReady || isProcessing}>
 				{isProcessing ? 'Processing...' : 'Pay Now'}
 			</button>
 		</form>
