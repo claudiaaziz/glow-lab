@@ -1,9 +1,39 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useEffect } from 'react';
+import { createPaymentIntent, updatePaymentIntent } from '../services/stripe';
 
 export const CartContext = createContext();
 
 export function CartProvider({ children }) {
 	const [cartItems, setCartItems] = useState([]);
+	const [paymentIntentId, setPaymentIntentId] = useState(null);
+	console.log('CartProvider 🩷 paymentIntentId:', paymentIntentId);
+	const [clientSecret, setClientSecret] = useState(null);
+
+	useEffect(() => {
+		const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+		const cartItemsToSend = cartItems.map((item) => ({
+			id: item.id,
+			quantity: item.quantity,
+		}));
+
+		if (totalPrice > 0) {
+			if (!paymentIntentId) {
+				// Create new PaymentIntent if we don't have one
+				const setupPayment = async () => {
+					const { clientSecret, paymentIntentId: newId } = await createPaymentIntent(cartItemsToSend);
+					setClientSecret(clientSecret);
+					setPaymentIntentId(newId);
+				};
+				setupPayment();
+			} else {
+				// Update existing PaymentIntent when cart changes
+				const updatePayment = async () => {
+					await updatePaymentIntent(cartItemsToSend, paymentIntentId);
+				};
+				updatePayment();
+			}
+		}
+	}, [cartItems, paymentIntentId]);
 
 	const addToCart = (product) => {
 		setCartItems((currentItems) => {
@@ -31,5 +61,17 @@ export function CartProvider({ children }) {
 		});
 	};
 
-	return <CartContext.Provider value={{ cartItems, addToCart, removeItemFromCart }}>{children}</CartContext.Provider>;
+	return (
+		<CartContext.Provider
+			value={{
+				cartItems,
+				addToCart,
+				removeItemFromCart,
+				paymentIntentId,
+				clientSecret,
+			}}
+		>
+			{children}
+		</CartContext.Provider>
+	);
 }

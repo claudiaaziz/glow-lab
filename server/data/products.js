@@ -11,7 +11,7 @@ export const products = [
 		name: 'Relaxed Fit Sweatpants',
 		description: 'Comfortable sweatpants made from sustainable materials.',
 		price: 69.99,
-		image: 'https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?auto=format&fit=crop&q=80',
+		image: 'https://images.pexels.com/photos/5850092/pexels-photo-5850092.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
 	},
 	{
 		id: 3,
@@ -53,7 +53,7 @@ export const products = [
 		name: 'Lounge Pants',
 		description: 'Soft and comfortable pants for lounging at home.',
 		price: 59.99,
-		image: 'https://images.unsplash.com/photo-1584370848010-d7fe6bc767ec?auto=format&fit=crop&q=80',
+		image: 'https://images.pexels.com/photos/7193436/pexels-photo-7193436.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
 	},
 	{
 		id: 9,
@@ -74,7 +74,7 @@ export const products = [
 		name: 'Thermal Henley',
 		description: 'Long-sleeve thermal perfect for layering.',
 		price: 44.99,
-		image: 'https://images.unsplash.com/photo-1618354691792-d1d42acfd860?auto=format&fit=crop&q=80',
+		image: 'https://oldnavy.gap.com/webcontent/0056/510/834/cn56510834.jpg',
 	},
 	{
 		id: 12,
