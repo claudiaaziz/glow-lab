@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import CheckoutForm from './CheckoutForm';
 import StripeWrapper from './StripeWrapper';

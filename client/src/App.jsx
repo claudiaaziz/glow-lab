@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import ProductList from './components/ProductList';
-import PaymentSuccess from './components/PaymentSuccess';
 import { CartProvider } from './context/CartContext';
+import PaymentStatus from './components/PaymentStatus';
 
 export default function App() {
 	return (
@@ -12,7 +12,7 @@ export default function App() {
 					<Header />
 					<Routes>
 						<Route path='/' element={<ProductList />} />
-						<Route path='/success' element={<PaymentSuccess />} />
+						<Route path='/payment-status' element={<PaymentStatus />} />
 					</Routes>
 				</div>
 			</Router>

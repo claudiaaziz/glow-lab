@@ -1,4 +1,4 @@
-.payment-success {
+.payment-status {
 	min-height: 100vh;
 	display: flex;
 	justify-content: center;
@@ -7,9 +7,9 @@
 	background-color: #f8f9fa;
 }
 
-.success-card {
+.status-card {
 	background: white;
-	padding: 2rem;
+	padding: 2.5rem;
 	border-radius: 8px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	text-align: center;
@@ -17,21 +17,21 @@
 	width: 100%;
 }
 
-.success-card h1 {
+.status-card h1 {
 	color: #2c3e50;
-	margin-bottom: 1rem;
+	margin-bottom: 0.5rem;
 	font-size: 1.5rem;
 }
 
-.success-card .thank-you {
+.status-card .message {
 	font-size: 1rem;
 	margin-bottom: 1.5rem;
 }
 
-.success-card p {
+.status-card p {
 	color: #666;
 }
 
-.success-card p:last-child {
-	margin-bottom: 1rem;
+.status-card .back-home {
+	margin-top: 1.5rem;
 }
