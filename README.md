@@ -2,6 +2,8 @@
 
 This is a basic e-commerce web application for a new direct-to-consumer brand, Glow Lab, showcasing Stripe's payment capabilities. The application includes a product catalog, a shopping cart, and a checkout flow integrated with Stripe's Payment Element for secure transactions.
 
+![glow-lab](./client/src/assets/glow-lab.png)
+
 ## Features
 
 -   **Product Catalog**: Displays a list of products, including images, titles, descriptions, and prices.
