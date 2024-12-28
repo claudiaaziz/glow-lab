@@ -14,7 +14,8 @@
 .product-image {
 	width: 100%;
 	height: 200px;
-	object-fit: cover;
+	object-fit: contain;
+	margin-top: 10px;
 }
 
 .product-info {
@@ -44,11 +45,63 @@
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	margin-top: auto;
-	padding-top: 1rem;
 }
 
+/* Add to Cart Button */
+
 .add-to-cart-btn {
-	padding: 0.5rem 1rem;
-	width: unset;
+	position: relative;
+	width: 30px;
+	height: 30px;
+	background-color: #f9f8f9;
+	border-radius: 50%;
+	padding: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-top: 0;
+}
+
+.add-cart-icon-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.add-cart-icon-wrapper .cart-icon {
+	transition: fill 0.2s;
+}
+
+.add-cart-icon-wrapper .cart-icon {
+	fill: rgb(81, 80, 80);
+}
+
+.add-to-cart-btn:hover svg {
+	fill: #f4c6cf;
+}
+
+.add-to-cart-btn:hover .plus-icon path {
+	stroke: #f4c6cf;
+}
+
+.add-to-cart-btn:hover {
+	background-color: unset;
+}
+
+.plus-icon {
+	background-color: rgb(249, 248, 249);
+	border-radius: 50%;
+	padding: 1.5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	bottom: 1px;
+	left: -1px;
+	height: 9px;
+	width: 9px;
+}
+
+.plus-icon path {
+	stroke: rgb(81, 80, 80);
+	transition: stroke 0.2s;
 }

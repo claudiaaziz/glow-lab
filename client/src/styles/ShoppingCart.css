@@ -1,8 +1,8 @@
 .cart-preview {
 	position: fixed;
-	top: 10vh;
+	top: 7vh;
 	right: 0;
-	max-height: 90vh;
+	max-height: 93vh;
 	background: white;
 	padding: 1rem;
 	overflow-y: auto;
@@ -52,7 +52,7 @@
 .remove-item-btn,
 .close-btn {
 	background: none;
-	color: #2c3e50;
+	color: rgb(81, 80, 80);
 	font-size: 1.5rem;
 	padding: 0.2rem 0.5rem;
 	transition: color 0.2s;
@@ -65,7 +65,7 @@
 
 .remove-item-btn:hover,
 .close-btn:hover {
-	color: #34495e;
+	color: #f4c6cf;
 	background: none;
 }
 
