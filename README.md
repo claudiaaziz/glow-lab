@@ -1,6 +1,6 @@
-# Cozy Threads E-commerce Demo Application
+# Glow Lab E-commerce Demo Application
 
-This is a basic e-commerce web application for a new direct-to-consumer brand, Cozy Threads, showcasing Stripe's payment capabilities. The application includes a product catalog, a shopping cart, and a checkout flow integrated with Stripe's Payment Element for secure transactions.
+This is a basic e-commerce web application for a new direct-to-consumer brand, Glow Lab, showcasing Stripe's payment capabilities. The application includes a product catalog, a shopping cart, and a checkout flow integrated with Stripe's Payment Element for secure transactions.
 
 ## Features
 
@@ -31,8 +31,8 @@ This is a basic e-commerce web application for a new direct-to-consumer brand, C
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/claudiaaziz/stripe-take-home
-    cd stripe-take-home
+    git clone https://github.com/claudiaaziz/glow-lab
+    cd glow-lab
     ```
 
 2. **Install Dependencies:**

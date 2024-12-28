@@ -49,7 +49,7 @@ const PaymentStatusContent = () => {
 			case 'succeeded':
 				return {
 					title: 'Payment Successful!',
-					message: 'Thank you for shopping with Cozy Threads!',
+					message: 'Thank you for shopping with Glow Lab!',
 				};
 			case 'processing':
 				return {

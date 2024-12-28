@@ -6,15 +6,17 @@
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-	background-color: #f8f9fa;
-	color: #2c3e50;
+	font-family: sans-serif;
+	background-color: #f9f8f9;
+	color: rgb(81, 80, 80);
+	user-select: none;
 }
 
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-weight: 400;
 }
 
 body {
@@ -28,14 +30,19 @@ body {
 	align-items: center;
 }
 
-h1 {
-	font-size: 3.2em;
-	line-height: 1.1;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: 400;
+	font-family: sans-serif;
 }
 
 button {
 	padding: 0.75rem;
-	background: #2c3e50;
+	background: #f4c6cf;
 	color: white;
 	border-radius: 4px;
 	margin-top: 1rem;
@@ -43,10 +50,11 @@ button {
 	cursor: pointer;
 	width: 100%;
 	transition: background-color 0.2s;
+	font-weight: 400;
 }
 
 button:hover {
-	background: #34495e;
+	background: #f2ccd3;
 }
 
 button:disabled {
