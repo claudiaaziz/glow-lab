@@ -45,7 +45,8 @@
 }
 
 .cart-icon:hover .cart-quantity,
-.cart-icon:hover {
+.cart-icon:hover,
+.cart-icon-active {
 	color: #f4c6cf;
 	fill: #f4c6cf;
 }

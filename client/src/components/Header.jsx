@@ -37,7 +37,7 @@ export default function Header() {
 			<nav>
 				<ul>
 					{/* <li>Shop</li> */}
-					<li onClick={() => setIsCartOpen(!isCartOpen)} className='cart-icon'>
+					<li onClick={() => setIsCartOpen(!isCartOpen)} className={`cart-icon ${isCartOpen && 'cart-icon-active'}`}>
 						<CartIcon />
 						<span className='cart-quantity'>{cartQuantity}</span>
 					</li>
